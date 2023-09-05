@@ -1,0 +1,4 @@
+[ubuntu 不解析php文件怎么办-PHP问题-PHP中文网](https://www.php.cn/faq/496606.html#:~:text=ubuntu%E4%B8%8D%E8%A7%A3%E6%9E%90php%E6%96%87%E4%BB%B6%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%EF%BC%9A1%E3%80%81%E5%BD%BB%E5%BA%95%E5%8D%B8%E8%BD%BD%E2%80%9Clibapache2-mod-php%E2%80%9D%E5%B9%B6%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85%EF%BC%8C%E7%84%B6%E5%90%8E%E9%87%8D%E5%90%AFapache2%EF%BC%9B2%E3%80%81%E5%9C%A8%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E6%9F%A5%E7%9C%8B%E4%B8%80%E4%B8%8Bphp%E6%A8%A1%E5%9D%97%E6%98%AF%E5%90%A6%E5%BC%80%E5%90%AF%E5%B9%B6%E9%80%9A%E8%BF%87%E2%80%9Cservice,apache2%20restart%E2%80%9D%E9%87%8D%E5%90%AFapache2%EF%BC%9B3%E3%80%81%E5%AE%89%E8%A3%85%E2%80%9Cphp7.0-curl%E2%80%9D%E6%A8%A1%E5%9D%97%E5%8D%B3%E5%8F%AF%E3%80%82)
+
+[Ubuntu服务器访问PHP文件显示该网页无法正常运作，目前无法处理此请求HTTP ERROR 500?_目前无法处理此请求。_GallopZhang的博客-CSDN博客](https://blog.csdn.net/qq_45448654/article/details/123682452)
+无法访问php文件
