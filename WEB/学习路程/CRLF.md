@@ -1,5 +1,5 @@
 
-回车换行
+CRLF漏洞是一种网络安全漏洞，指的是回车（Carriage Return，CR）和换行（Line Feed，LF）字符被恶意利用的情况
 
 ```
 即用\r\n(%0d%0a)进行注入
