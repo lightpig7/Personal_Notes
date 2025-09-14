@@ -1,4 +1,5 @@
 [idea创建springboot项目并启动 / 超详细步骤_okikka的博客-CSDN博客](https://blog.csdn.net/qq_42711381/article/details/106756977)
+
 ```
 建立好后，需要点击Modules然后点击+号，选择Import Module，找到我们本项目的pom.xml文件
 
@@ -6,6 +7,7 @@
 
 然后File->Invalidate Cache，重启一下
 ```
+
 [Spring Initializr](https://start.spring.io/)
 手动初始化项目
 
@@ -16,6 +18,11 @@
 勾选工具Dependencies：Spring Boot DevTools、Spring web、JDBC API、MYSQL Driver、 Mybatis、MyBatis Framework
 
 application.yml
+
+2.85
+
+1.185
+
 ```
 server:
 
@@ -41,11 +48,12 @@ mapper-locations: classpath:mapper/*.xml
 ```
 
 Controller.hello.java
+
 ```
 package com.example.demo.Controller;  
-  
+
 import org.springframework.web.bind.annotation.*;  
-  
+
 @RestController  
 @RequestMapping("/login")  
 public class hello {  
@@ -63,8 +71,6 @@ public class hello {
 @RestController或@ResponseBody //返回字符串本身
 ```
 
-
-
 ## maven安装依赖
 
 在pom.xml中安装，插入语句
@@ -77,10 +83,9 @@ public class hello {
     <version>4.0.1</version> <!-- 使用适当的版本 -->
     <scope>provided</scope>
 </dependency>
-
 ```
 
-## 无法解析html
+## 找不到html
 
 添加thymeleaf依赖
 
@@ -90,8 +95,6 @@ public class hello {
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 ```
-
-
 
 ## 启动jar包
 
@@ -107,21 +110,10 @@ java -Dspring.profiles.active=dev -Dserver.port=8080 -jar test.jar
 
 ![image-20240117173229809](F:\笔记\开发\Spring-boot.assets\image-20240117173229809.png)
 
-
-
 ![image-20240117173307454](F:\笔记\开发\Spring-boot.assets\image-20240117173307454.png)
-
-
 
 ![image-20240117173333803](F:\笔记\开发\Spring-boot.assets\image-20240117173333803.png)
 
-
-
 ![image-20240117173344140](F:\笔记\开发\Spring-boot.assets\image-20240117173344140.png)
 
-
-
-
-
-
-
+修改pom.xml的值

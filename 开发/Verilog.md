@@ -6,8 +6,6 @@
 
 ![image-20240116184814300](F:\笔记\开发\Verilog.assets\image-20240116184814300.png)
 
-
-
 所以改为256clk延时即可
 
 ![image-20240116185927302](F:\笔记\开发\Verilog.assets\image-20240116185927302.png)

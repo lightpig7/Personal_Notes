@@ -72,3 +72,16 @@ HashMap
 ->getHostAddress(u)
 ->InetAddress.getByName(host)
 
+
+
+
+
+此外：
+
+HashMap类中的put函数也会调用hash函数，有些类可能会继承其put函数，也可能会造成hashcode可控
+
+```
+public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
+}
+```

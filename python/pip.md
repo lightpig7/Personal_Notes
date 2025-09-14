@@ -1,9 +1,8 @@
-
 更换国内源
 
 ```
 pip install xxx -i https://pypi.tuna.tsinghua.edu.cn/simple
- 
+
 本地安装也
 pip install h5py-2.10.0-cp36-cp36m-win32.whl -i https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -17,6 +16,7 @@ pip install h5py-2.10.0-cp36-cp36m-win32.whl -i https://pypi.tuna.tsinghua.edu.c
 ```
 
 pip卸载
+
 ```
 pip uninstall xxx
 ```
@@ -26,6 +26,20 @@ pip升级
 ```
 python -m pip install --upgrade pip
 ```
+
+pip位置
+
+```
+pip 
+```
+
+pip查看已安装包
+
+```
+pip list
+```
+
+
 
 ##### 安装报错可以手动安装
 
@@ -51,22 +65,41 @@ pip install h5py-2.10.0-cp36-cp36m-win32.whl即可
 
 [Simple Index (tsinghua.edu.cn)](https://pypi.tuna.tsinghua.edu.cn/simple/)
 
-#### anaconda
+https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient
+
+## anaconda
 
 有时候环境总会出现各种各样的问题，此时我们可以采用anaconda来搭建虚拟环境
 
 ```
-conda create --name python36 python=3.6
+conda create --name python36 python=3.6 
 
 conda env list
 
 activate python36
+conda activate python310
 
 conda env remove --name py
+```
 
-jupyter notebook
+#### 导出导入已有环境
 
-jupyter lab
+打开Anaconda Prompt，输入
+
+```
+activate your_environment
+```
+
+来到自己要备份的虚拟环境下，然后输入
+
+```
+conda env export > environment.yaml 
+```
+
+当我们想再次创建该环境，或根据别人提供的.yaml文件复现环境时，可以：
+
+```python
+conda env create -f environment.yaml
 ```
 
 [保姆级教程，4步完成JupyterLab插件安装（附多款高生产力插件推荐） - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/556433254)

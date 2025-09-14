@@ -1,14 +1,15 @@
-# JWT(JSON Web Tokens)
+## JWT(JSON Web Tokens)
 
 在线工具：[JSON Web Tokens - jwt.io](https://jwt.io/)
 
 本地工具：[[GitHub - ticarpi/jwt_tool: :snake: A toolkit for testing, tweaking and cracking JSON Web Tokens](https://github.com/ticarpi/jwt_tool)](https://github.com/ticarpi/jwt_tool)
 
 三个部分组成
+
 - Header
 - Payload
 - Signature
-形式：xxxxx.yyyyy.zzzzz
+  形式：xxxxx.yyyyy.zzzzz
 
 ```
 HEADER:ALGORITHM & TOKEN TYPE
@@ -35,8 +36,8 @@ VERIFY SIGNATURE
 ```
 
 ## 无签名认证时，可以先调为HS256加密算法进行JWT
-```
 
+```
 当有签名时，可将 Header 中的加密算法改为 None（JWT 支持将算法设定为 “None”。如果“alg” 字段设为“ None”，那么签名会被置空，这样任何 token 都是有效的）
 
 改payload为:header + '.' + payload + '.'（注意最后的点）
@@ -44,12 +45,12 @@ VERIFY SIGNATURE
 直接用base64改即可
 ```
 
-## 弱密码利用工具爆破获得密钥 
+## 弱密码利用工具爆破获得密钥
+
 ```
 c-jwt-cracker
 
 ./jwtcrack xxx
-
 
 jwt_tool.py
 
@@ -65,6 +66,7 @@ ES256 和 RS256 一样，都使用私钥签名，公钥验证
 ```
 
 ## 当知道私钥时，可以通过RS2565构造jwt
+
 ```
 js脚本
 const jwt = require('jsonwebtoken');

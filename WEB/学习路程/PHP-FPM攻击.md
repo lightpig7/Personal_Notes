@@ -26,8 +26,6 @@ typedef struct {
 
 而没有暴露时，可以考虑SSRF，例如利用FPT来进行，参考buu靶场的OnePointerPHP
 
-
-
 ```
 import socket
 import random
@@ -176,7 +174,7 @@ class FastCGIClient:
         else:
             record = self.__decodeFastCGIHeader(header)
             record['content'] = b''
-            
+
             if 'contentLength' in record.keys():
                 contentLength = int(record['contentLength'])
                 record['content'] += buffer.read(contentLength)
@@ -282,12 +280,3 @@ if __name__ == '__main__':
     response = client.request(params, content)
     print(force_text(response))
 ```
-
-
-
-
-
-
-
-
-

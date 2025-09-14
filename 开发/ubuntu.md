@@ -1,36 +1,17 @@
 ## 基础
 
 - mkdir:创建目录
+
 - mv：移动文件、更改文件名
+
 - rm:删除文件
+
 - rm -r ：删除文件夹
+
 - rm -f ：强制删除
-```
-命令模式下
-gg		# 跳至文件首行
-dG		# 删除光标所在行到末尾行内容，d删除，G跳转到文件末尾行
-```
-
-```
-1、使用“gg”将光标移动到文档开头
-
-2、使用“v”切换到可视模式
-
-3、再用“G”将光标移动到文档尾部
-
-这三步操作相当于Alt+A全选代码
-
-4、最后使用“=”，即可完成整个文档的自动排版。
-
-
-全部复制：按esc键后，先按gg，然后ggyG
-
-:set paste 解除vim粘贴时全注释问题
-
-vim查找使用 /xxx 查找前一个匹配项，只需按下"N"键 查找下一个匹配项，只需按下"n"键 
-```
 
 **引号**
+
 ```
 在linux中，单引号所包含的内容只代表纯文本
 
@@ -40,9 +21,11 @@ vim查找使用 /xxx 查找前一个匹配项，只需按下"N"键 查找下一�
 ```
 
 **. 点 source**
+
 ```
 用. file执行文件，是不需要file有x权限的
 ```
+
 ## apache
 
 ```
@@ -54,17 +37,18 @@ sudo service apache2 start
 
 sudo service apache2 stop
 ```
+
 ## apt-get
 
 ```
 使用aptitude代替
 
-sudo apt-get purge libelf1:卸载
+sudo apt-get purge libelf1    \\卸载
 
 sudo apt-get autoremove libapache2-mod-php7.4 卸载
 ```
 
-## 换源
+## apt换源
 
 ```
 换源
@@ -74,6 +58,7 @@ sudo apt upgrade
 
 
 # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+cat > /etc/apt/sources.list << 'EOF'
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
@@ -82,18 +67,31 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+EOF
 
+cat > /etc/apt/sources.list << 'EOF'
+deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
+deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
+deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted universe multiverse
+EOF
 # 预发布软件源，不建议启用
 # deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
 # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse
 ```
 
-
+路径为：/etc/apt/sources.list.d/ubuntu.sources
 
 ```
-session存放路径
-
-/var/lib/php/sessions
+Types: deb
+URIs: http://mirrors.tuna.tsinghua.edu.cn/ubuntu/
+Suites: noble noble-updates noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 ```
 
 ## java
@@ -118,17 +116,7 @@ sudo mysql_secure_installation
 mvn clean package -DskipTests
 ```
 
-## 重启网卡
 
-```
-kali:
-sudo service networking restart
-
-sudo systemctl restart networking
-
-ubuntu:
-service network-manager restart
-```
 
 ## 权限管理
 
@@ -149,26 +137,79 @@ sudo chown 777 html
 其他用户（others）：读、执行（5 = 4 + 1）
 ```
 
-## tar
+# 安装工具
 
-#### 压缩 tar 文件
-
-```
-tar -czvf archive.tar.gz directory_to_compress
-```
-
-- `-x`: 解压缩
-- `-z`: 使用 gzip 解压缩
-- `-v`: 显示详细信息（可选）
-- `-f`: 指定要解压的归档文件
-
-#### 解压 tar 文件
+## VM tools
 
 ```
-tar -xzvf archive.tar.gz
+sudo apt install open-vm-tools
 ```
 
-- `-x`: 解压缩
-- `-z`: 使用 gzip 解压缩
-- `-v`: 显示详细信息（可选）
-- `-f`: 指定要解压的归档文件
+[如果安装后不能正常复制文件](./Ubuntu18-64位安装VMware Tools后无法复制粘贴解决办法_ubuntu 64 复制不了-CSDN博客 (2024_6_3 23_56_02).html) 
+
+## ssh
+
+要在 Ubuntu 系统上安装 OpenSSH 客户端应用程序，请在终端提示符下使用此命令：
+
+```
+sudo apt install openssh-client
+```
+
+要安装 OpenSSH 服务器应用程序和相关支持文件，请在终端提示符下使用此命令：
+
+```
+sudo apt install openssh-server
+
+sudo systemctl enable ssh
+
+# 手动启动 SSH 服务（使用 service 命令或直接运行二进制文件）
+service ssh start
+```
+
+# 网络配置
+
+## 重启网卡
+
+```
+kali:
+sudo service networking restart
+
+sudo systemctl restart networking
+
+ubuntu:
+service network-manager restart
+```
+
+## 网卡掉了
+
+```
+1、首先确保网卡设备名称能看到，看不到，以下步骤无意义；
+sudo lshw -c network |grep ens
+
+2、命令行执行以下命令；
+sudo service NetworkManager stop
+sudo rm  /var/lib/NetworkManager/NetworkManager.state
+sudo gedit /etc/NetworkManager/NetworkManager.conf 
+
+这一步将打开一个文件，把里面的managed=false改为managed=true 再保存。
+sudo service NetworkManager start
+
+3、若成功则右上角已经能看到本地网络标志；
+```
+
+
+
+## dns解析
+
+当网络很慢时，可配置`/etc/hosts`或者 `/etc/resolv.conf`文件来进行DNS解析
+
+## deb包安装
+
+```
+https://mirrors.aliyun.com/docker-ce/linux/ubuntu/dists/xenial/pool/stable/amd64/?spm=a2c6h.25603864.0.0.5b3f1ae84PxxyV
+```
+
+```
+sudo apt-get install -y docker-ce=5:20.10.13~3-0~ubuntu-jammy docker-ce-cli=5:20.10.13~3-0~ubuntu-jammy
+```
+

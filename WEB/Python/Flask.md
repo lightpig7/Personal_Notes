@@ -6,7 +6,9 @@
 加密 python flask_session_cookie_manager3.py encode -s "secret_key" -t "data"
 ```
 
-![image-20240109115120253](F:\笔记\WEB\学习路程\Flask.assets\image-20240109115120253.png)
+爆破session密钥：[Flask-Unsign/.github/ISSUE_TEMPLATE at master · Paradoxis/Flask-Unsign · GitHub](https://github.com/Paradoxis/Flask-Unsign)
+
+![image-20240109115120253](Flask.assets\image-20240109115120253.png)
 
 ## pin攻击
 
@@ -46,4 +48,6 @@ mac 02:42:ac:11:00:06   2485377892358
 
 
 ## yaml反序列化
+
+## pickle反序列化
 

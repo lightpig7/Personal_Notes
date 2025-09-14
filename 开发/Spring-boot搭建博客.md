@@ -55,7 +55,7 @@ nohup  ./start.sh &  //不间断运行文件内的指令
 nohup java -jar jar包名称 &
 ```
 
-##   javascript时间
+## javascript时间
 
 在JavaScript中，月份是从0开始计数的，所以1月对应的是0，2月对应的是1
 
@@ -70,13 +70,7 @@ function setTime() {
               + '秒';
           document.getElementById("htmer_time").innerHTML = currentTimeHtml;
       }
-     
+
 所以在这个函数中，计算当前时间与2023年1月1日0时0分0秒之间的时间差,应该这样设置时间
 var create_time = Math.round(new Date(Date.UTC(2023, 0, 1, 0, 0, 0)).getTime() / 1000);
-
 ```
-
-
-
-
-

